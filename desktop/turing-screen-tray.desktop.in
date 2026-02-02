@@ -1,0 +1,16 @@
+[Desktop Entry]
+Type=Application
+Name=Turing Smart Screen
+Name[pt_BR]=Turing Smart Screen
+GenericName=Display Monitor Tray
+GenericName[pt_BR]=Bandeja do Monitor de Display
+Comment=System tray control for Turing Smart Screen display
+Comment[pt_BR]=Controle da bandeja do sistema para o display Turing Smart Screen
+Exec=@TURING_DIR@/venv/bin/python3.11 @TURING_DIR@/tray/main.py
+Path=@TURING_DIR@
+Icon=turing-smart-screen
+Terminal=false
+StartupNotify=false
+Categories=System;Monitor;TrayIcon;
+X-KDE-autostart-phase=2
+X-GNOME-Autostart-enabled=true

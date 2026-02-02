@@ -1,0 +1,16 @@
+[Desktop Entry]
+Type=Application
+Name=Turing Smart Screen
+Name[pt_BR]=Turing Smart Screen
+GenericName=USB Display Controller
+GenericName[pt_BR]=Controlador de Display USB
+Comment=Control and configure your Turing Smart Screen USB display
+Comment[pt_BR]=Controle e configure seu display USB Turing Smart Screen
+Exec=@TURING_DIR@/venv/bin/python3.11 @TURING_DIR@/tray/main.py
+Path=@TURING_DIR@
+Icon=turing-smart-screen
+Terminal=false
+StartupNotify=true
+Categories=System;Monitor;HardwareSettings;Settings;
+Keywords=turing;screen;display;monitor;usb;hardware;fps;temperature;
+Keywords[pt_BR]=turing;tela;display;monitor;usb;hardware;fps;temperatura;

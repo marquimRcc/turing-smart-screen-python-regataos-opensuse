@@ -1,137 +1,194 @@
-# ![Icon](https://raw.githubusercontent.com/mathoudebine/turing-smart-screen-python/main/res/icons/monitor-icon-17865/24.png) turing-smart-screen-python
+# Turing Smart Screen — Regata OS / openSUSE Edition
 
-### ⚠️ DISCLAIMER - PLEASE READ ⚠️
+<p align="center">
+  <img src="assets/icons/turing-tray.svg" width="96" alt="Turing Smart Screen Icon"/>
+</p>
 
-This project is **not affiliated, associated, authorized, endorsed by, or in any way officially connected with Turing / XuanFang / Kipye brands**, or any of theirs subsidiaries, affiliates, manufacturers or sellers of their products. All product and company names are the registered trademarks of their original owners.
+<p align="center">
+  <strong>Fork otimizado para Regata OS e openSUSE</strong><br/>
+  Instalador automático · Aplicativo de bandeja · Suporte AMD GPU · Bilíngue (PT-BR / EN)
+</p>
 
-This project is an open-source alternative software, NOT the original software provided for the smart screens. **Please do not open issues for USBMonitor.exe/ExtendScreen.exe or for the smart screens hardware here**.
-* for Turing Smart Screen, use the official forum here: http://discuz.turzx.com/
-* for other smart screens, contact your reseller
+<p align="center">
+  <a href="#instalação">Instalação</a> ·
+  <a href="#funcionalidades">Funcionalidades</a> ·
+  <a href="#comandos-úteis">Comandos</a> ·
+  <a href="#english">English</a>
+</p>
+
 ---
 
-![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black) ![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logoColor=white&logo=data:image/svg%2bxml;base64,PHN2ZyByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+V2luZG93czwvdGl0bGU+PHBhdGggZmlsbCA9ICIjRkZGRkZGIiBkPSJNMCwwSDExLjM3N1YxMS4zNzJIMFpNMTIuNjIzLDBIMjRWMTEuMzcySDEyLjYyM1pNMCwxMi42MjNIMTEuMzc3VjI0SDBabTEyLjYyMywwSDI0VjI0SDEyLjYyMyIvPjwvc3ZnPg==) [![macOS](https://img.shields.io/badge/mac%20os%20(⚠️major%20bug)-000000?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/mathoudebine/turing-smart-screen-python/issues/7) ![Raspberry Pi](https://img.shields.io/badge/Raspberry%20Pi-A22846?style=for-the-badge&logo=Raspberry%20Pi&logoColor=white) ![Python](https://img.shields.io/badge/Python-3.9/3.13-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) [![Licence](https://img.shields.io/github/license/mathoudebine/turing-smart-screen-python?style=for-the-badge)](./LICENSE)
-  
-A Python system monitor program and an abstraction library for **small IPS USB-C (UART) displays.**    
+## Sobre
 
-Supported operating systems : macOS, Windows, Linux (incl. Raspberry Pi), basically all OS that support Python 3.9+  
+Este fork do [turing-smart-screen-python](https://github.com/mathoudebine/turing-smart-screen-python) adiciona suporte completo para **Regata OS** e **openSUSE**, incluindo:
 
-### ✅ Supported smart screens models:
+- **Instalador automatizado** que configura tudo: dependências, venv, USB, systemd
+- **Aplicativo de bandeja do sistema (system tray)** para KDE Plasma com controle completo
+- **Serviço systemd** no nível de usuário para inicialização automática confiável
+- **Detecção automática de GPU AMD** com instalação do `pyamdgpuinfo`
+- **Interface bilíngue** — Português (BR) e English (US)
 
-| ✅ Turing Smart Screen 3.5"                           | ✅ XuanFang 3.5"                                   | ✅ Turing Smart Screen 5"                    |
-|------------------------------------------------------|---------------------------------------------------|---------------------------------------------|
-| <img src="res/docs/turing.webp"/>                    | <img src="res/docs/xuanfang.webp"/>               | <img src="res/docs/turing5inch.png"/>       |
-| also improperly called "revision A" by the resellers | revision B & flagship (with backplate & RGB LEDs) | basic support (no video or storage for now) |
+## Pré-requisitos
 
-| ⚠️ Turing Smart Screen 8.8"                  | ✅ Turing Smart Screen 2.1" / 2.8"                                 |
-|---------------------------------------------|------------------------------------------------------------------|
-| <img src="res/docs/turing8inch.webp"/>      | <img src="res/docs/turing2inch.webp"  width="60%" height="60%"/> |
-| basic support (no video or storage for now)<br/>⚠️ [New revision V1.1 not supported!](https://github.com/mathoudebine/turing-smart-screen-python/issues/727) | basic support (no video or storage for now)                      |
+| Requisito | Detalhes |
+|-----------|----------|
+| **Sistema** | Regata OS / openSUSE Leap ou Tumbleweed |
+| **Python** | 3.11 (`sudo zypper install python311`) |
+| **Display** | Turing Smart Screen 3.5" / 5" / 7" conectado via USB |
+| **Desktop** | KDE Plasma (recomendado) ou qualquer DE com suporte a system tray |
 
-| ✅ [UsbPCMonitor 3.5" / 5"](https://aliexpress.com/item/1005003931363455.html)                       | ✅ [Kipye Qiye Smart Display 3.5"](https://www.aliexpress.us/item/3256803899049957.html) |
-|-----------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
-| <img src="res/docs/UsbPCMonitor_5inch.webp" width="60%" height="60%"/>                              | <img src="res/docs/kipye-qiye-35.webp" width="60%" height="60%"/>                       |
-| Unknown manufacturer, visually similar to Turing 3.5" / 5". Original software is `UsbPCMonitor.exe` | Front panel has an engraved inscription "奇叶智显" Qiye Zhixian (Qiye Smart Display)        |
+## Instalação
 
-| ✅ WeAct Studio Display FS V1 0.96"                            | ✅ WeAct Studio Display FS V1 3.5"                            |
-|---------------------------------------------------------------|--------------------------------------------------------------|
-| <img src="res/docs/weact_0.96.jpg" width="60%" height="60%"/> | <img src="res/docs/weact_3.5.png" width="60%" height="60%"/> |
+```bash
+# 1. Clone o repositório
+git clone https://github.com/marquimRcc/turing-smart-screen-python-regataos-opensuse
+cd turing-smart-screen-python-regataos-opensuse
 
-<details>
+# 2. Execute o instalador
+bash install.sh
+```
 
-<summary><h3>❌ Not (yet) supported / not tested smart screen models</h3></summary>
+O instalador irá:
 
-| ❔ _AIDA64 / AX206 / USB2LCD..._                                                                                                                                                                        | ❔ _[ACEMAGIC S1 Mini PC - integrated 1,9″ display](https://acemagic.com/products/acemagic-s1-12th-alder-laker-n95-mini-pc)_                                  |
-|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| <img src="res/docs/ax206.jpg" width="45%" height="45%" /> <img src="res/docs/geekteches_ad35.jpg" width="45%" height="45%" /> <br/> <img src="res/docs/smartcool_lcd.webp" width="45%" height="45%" /> | <img src="res/docs/acemagic-s1-mini.jpg"/>                                                                                                                   |
-| Not supported for now. Produced by multiple manufacturers, all use the same [Appotech AX206 hacked photo frame firmware](https://github.com/dreamlayers/dpf-ax). Supported by AIDA64 and lcd4linux     | Not supported for now but could be integrated: protocol has been decoded, [see here](https://github.com/mathoudebine/turing-smart-screen-python/issues/677). |
+1. Verificar pré-requisitos (OS, Python, espaço em disco)
+2. Instalar dependências do sistema via `zypper`
+3. Criar ambiente virtual Python 3.11
+4. Instalar todas as dependências Python + PyQt5
+5. Configurar regras udev para permissão USB
+6. Instalar serviço systemd (nível de usuário)
+7. Instalar o aplicativo de bandeja e ícone
+8. Executar o assistente de configuração
 
-| ❔ _NXElec BeadaPanel 3/4/5/6/7_                                                                                                                                                                                                                                                                                           |
-|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| <img src="res/docs/beadapanel-3.jpg" width="30%" height="30%" /> <img src="res/docs/beadapanel-5s.jpg" width="30%" height="30%" /> <img src="res/docs/beadapanel-6.jpg" width="30%" height="30%" />                                                                                                                       |
-| Not supported for now but could be integrated: [Pankel-Link V1.0 Protocol Specification](https://www.nxelec.com/documents/bp/Panel-Link_USB_Media_Stream_Transport_Protocol_Rev10.pdf) / [Status-Link V1.1 Protocol Specification](https://www.nxelec.com/documents/bp/Status-Link_USB_Panel_Control_Protocol_Rev11.pdf). |
+## Funcionalidades
 
-| ❌ _Waveshare [2.1inch](https://www.waveshare.com/wiki/2.1inch-USB-Monitor) / [2.8inch](https://www.waveshare.com/wiki/2.8inch-USB-Monitor) / [5inch](https://www.waveshare.com/wiki/5inch-USB-Monitor) / [7inch](https://www.waveshare.com/wiki/7inch-USB-Monitor) USB-Monitor_                                                                                                            | ❌ _[GUITION Smart screen 3.5"](https://aliexpress.com/item/1005006169962183.html)_                                                                                                                                                                                                          |
-|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| <img src="res/docs/waveshare-21inch-28inch.png"/>                                                                                                                                                                                                                                                                                                                                          | <img src="res/docs/guition.webp"/>                                                                                                                                                                                                                                                          |
-| Sold on [Waveshare shop](https://www.waveshare.com/2.8inch-usb-monitor.htm) or [Aliexpress](https://fr.aliexpress.com/item/1005006071685067.html). Managed by [proprietary Windows software "Waveshare PC Monitor"](https://github.com/mathoudebine/turing-smart-screen-python/wiki/Vendor-apps#waveshare-pc-monitor---vendor-app). Cannot be supported by this project: needs a firmware. | Managed by [proprietary Windows software "GUITION Smart screen"](https://github.com/mathoudebine/turing-smart-screen-python/wiki/Vendor-apps#guition---vendor-app). Cannot be supported by this project: [see here](https://github.com/mathoudebine/turing-smart-screen-python/issues/426). |
+### Aplicativo de Bandeja (System Tray)
 
-| ❌ _[(Fuldho?) 3.5" IPS Screen](https://aliexpress.com/item/1005005632018367.html)_                                                                                                                                                     |
-|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| <img src="res/docs/fuldho_3.5.jpg" width="40%" height="40%" />                                                                                                                                                                         |
-| Managed by [proprietary Windows software `SmartMonitor.exe`](https://smartdisplay.lanzouo.com/b04jvavkb). Cannot be supported by this project: [see here](https://github.com/mathoudebine/turing-smart-screen-python/discussions/298). |
+O ícone no painel do sistema oferece:
 
-</details>
+| Função | Descrição |
+|--------|-----------|
+| ▶ **Iniciar / ⏹ Parar / 🔄 Reiniciar** | Controle completo do display via systemd |
+| 🎨 **Temas** | Troque o tema visualmente (lista automática dos temas disponíveis) |
+| 🔄 **Orientação** | Alterne entre 0°, 90°, 180°, 270° |
+| ⚙️ **Assistente de Configuração** | Abre o `configure.py` original |
+| 📝 **Editar config.yaml** | Abre no editor padrão |
+| 🔧 **Preferências** | Idioma, notificações, intervalo de verificação |
+| 🚀 **Iniciar com o sistema** | Liga/desliga o autostart do serviço |
+| 🌐 **Idioma** | Troque entre PT-BR e EN-US em tempo real |
+| 🔍 **Info de Hardware** | GPU, sensores, dispositivos USB |
+| 📋 **Ver Logs** | Logs do `journalctl` com busca e cópia |
+| ❓ **Sobre / Suporte** | Links para GitHub e projeto original |
 
-### [> What is my smart screen model?](https://github.com/mathoudebine/turing-smart-screen-python/wiki/Hardware-revisions)  
+### Indicador de Status
 
-**Please note all listed smart screens are different products** designed and produced by different companies, despite having a similar appearance. Their communication protocol is also different.  
-This project offers an abstraction layer to manage all of these products in a unified way, including some product-specific features like backplate RGB LEDs for available models!
+O ícone muda de cor conforme o estado:
 
-If you haven't received your screen yet but want to start developing your theme now, you can use the [**"simulated LCD" mode!**](https://github.com/mathoudebine/turing-smart-screen-python/wiki/Simulated-display)
+- 🟢 **Verde** — Display em execução
+- ⚫ **Cinza** — Display parado
+- 🔴 **Vermelho** — Erro
 
-## How to start
+## Comandos Úteis
 
-### [> Follow instructions on the wiki to configure and start this project.](https://github.com/mathoudebine/turing-smart-screen-python/wiki)
+```bash
+# Controle do display
+systemctl --user start turing-screen      # Iniciar
+systemctl --user stop turing-screen       # Parar
+systemctl --user restart turing-screen    # Reiniciar
+systemctl --user status turing-screen     # Status
 
-There are 2 possible uses of this project Python code:
-* **[as a System Monitor](#system-monitor)**, a standalone program working with themes to display your computer HW info and custom data in an elegant way.
-[Check if your hardware is supported.](https://github.com/mathoudebine/turing-smart-screen-python/wiki/System-monitor-:-hardware-support)
-* **[integrated in your project](#control-the-display-from-your-python-projects)**, to fully control the display from your own Python code.
+# Autostart
+systemctl --user enable turing-screen     # Ativar no boot
+systemctl --user disable turing-screen    # Desativar
 
-## System monitor
+# Logs
+journalctl --user -u turing-screen -f     # Logs em tempo real
+journalctl --user -u turing-screen -n 50  # Últimas 50 linhas
 
-This project is mainly a complete standalone program to use your screen as a system monitor, like the original vendor app.  
-Some themes are already included for a quick start!  
-### [> Configure and start system monitor](https://github.com/mathoudebine/turing-smart-screen-python/wiki/System-monitor-:-how-to-start)
-<img src="res/docs/config_wizard.png"/>  
+# Reconfigurar
+cd /caminho/do/repo && ./venv/bin/python3.11 configure.py
 
-* Fully functional multi-OS code base (operates out of the box, tested on Windows, Linux & MacOS).
-* Display configuration using GUI configuration wizard or `config.yaml` file: no Python code to edit.
-* Compatible with [3.5" & 5" smart screen models (Turing, XuanFang...)](https://github.com/mathoudebine/turing-smart-screen-python/wiki/Hardware-revisions). Backplate RGB LEDs are also supported for available models!
-* Support [multiple hardware sensors and metrics (CPU/GPU usage, temperatures, memory, disks, etc)](https://github.com/mathoudebine/turing-smart-screen-python/wiki/System-monitor-:-themes#stats-entry) with configurable refresh intervals.
-* Allow [creation of themes (see `res/themes`) with `theme.yaml` files using theme editor](https://github.com/mathoudebine/turing-smart-screen-python/wiki/System-monitor-:-themes) to be [shared with the community!](https://github.com/mathoudebine/turing-smart-screen-python/discussions/categories/themes)
-* Easy to expand: [custom Python data sources](https://github.com/mathoudebine/turing-smart-screen-python/wiki/System-monitor-:-themes#add-custom-stats-to-a-theme) can be written to pull specific information and display it on themes like any other sensor.
-* Auto-detect COM port based on the selected smart screen model.
-* Tray icon with Exit option, useful when the program is running in background.
+# Desinstalar
+bash uninstall.sh
+```
 
-### [> List and preview of included themes](res/themes/themes.md)
-<img src="res/themes/3.5inchTheme2/preview.png" height="150" /> <img src="res/themes/Terminal/preview.png" height="150" /> <img src="res/themes/Cyberpunk-net/preview.png" height="150" /> <img src="res/themes/bash-dark-green-gpu/preview.png" height="150" /> <img src="res/themes/Landscape6Grid/preview.png" width="150" /> <img src="res/themes/LandscapeMagicBlue/preview.png" width="150" /> <img src="res/themes/LandscapeEarth/preview.png" width="150" /> ... [view full list](res/themes/themes.md)
-### [> Themes creation/edition (using theme editor)](https://github.com/mathoudebine/turing-smart-screen-python/wiki/System-monitor-:-themes)
-### [> Themes shared by the community](https://github.com/mathoudebine/turing-smart-screen-python/discussions/categories/themes)
-<img src="https://user-images.githubusercontent.com/79225820/203648707-6f043068-5c9d-454d-9c0a-3d9ea02ece77.jpg" height="150" /> <img src="https://user-images.githubusercontent.com/121983479/210663324-994c987a-6489-4482-8883-db74ef566014.jpg" height="150" />
-<img src="https://user-images.githubusercontent.com/120036534/208128675-897f60cd-5647-40b7-b074-b56b67e775dd.png" height="150" /> <img src="https://user-images.githubusercontent.com/65172896/217549510-149913ac-ef4e-4f61-8f5e-6d768483a02c.png" height="150" /> and more... Share yours!
+## Estrutura do Projeto
 
-## Control the display from your Python projects
+```
+turing-smart-screen-python-regataos-opensuse/
+├── main.py                     # (original) Programa principal do display
+├── configure.py                # (original) Assistente de configuração
+├── requirements.txt            # (original) Dependências Python
+├── res/themes/                 # (original) Temas do display
+│
+├── install.sh                  # ★ Instalador automático
+├── uninstall.sh                # ★ Desinstalador limpo
+├── README.md                   # ★ Esta documentação
+├── tray/                       # ★ Aplicativo de bandeja (PyQt5)
+│   ├── main.py                 #   Ponto de entrada
+│   ├── tray_app.py             #   Classe principal TuringTray
+│   ├── service_manager.py      #   Interface com systemd
+│   ├── config_manager.py       #   Gerenciamento de configuração
+│   ├── dialogs/                #   Janelas de diálogo
+│   │   ├── about.py, settings.py, hardware_info.py, log_viewer.py
+│   └── i18n/                   #   Traduções
+│       ├── pt_BR.json, en_US.json
+├── assets/icons/               # ★ Ícones SVG do tray
+├── config/                     # ★ Regras udev pro USB
+├── desktop/                    # ★ Templates .desktop (autostart + menu)
+└── systemd/                    # ★ Template do serviço de usuário
+```
 
-If you don't want to use your screen for system monitoring, you can just use this project as a module from any Python code to do some simple operations on the display:
-- **Display custom picture**
-- **Display text**
-- **Display horizontal / radial progress bar**
-- **Screen rotation**
-- Clear the screen (blank)
-- Turn the screen on/off
-- Display soft reset
-- Set brightness
-- Set backplate RGB LEDs color (on supported hardware rev.) 
+> Itens marcados com ★ são adições deste fork.
 
-This project will act as an abstraction library to handle specific protocols and capabilities of each supported smart screen models in a transparent way for the user.
-Check `simple-program.py` as an example.
+## Solução de Problemas
 
-### [> Control the display from your code](https://github.com/mathoudebine/turing-smart-screen-python/wiki/Control-screen-from-your-own-code)
+**Display não inicia:**
+1. Verifique a conexão USB: `lsusb | grep -i ch34`
+2. Verifique permissões: `ls -la /dev/ttyUSB*`
+3. Verifique se fez logout/login após a instalação
+4. Veja os logs: `journalctl --user -u turing-screen -n 20`
 
-## Troubleshooting
-If you have trouble running the program as described in the wiki, please check [open/closed issues](https://github.com/mathoudebine/turing-smart-screen-python/issues) & [the wiki Troubleshooting page](https://github.com/mathoudebine/turing-smart-screen-python/wiki/Troubleshooting)
+**Tray não aparece:**
+1. Verifique se o KDE tem suporte a system tray
+2. Execute manualmente: `~/caminho/repo/venv/bin/python3.11 ~/caminho/repo/tray/main.py`
 
-## They're talking about it!
+**GPU AMD não detectada:**
+- Verifique drivers: `lspci -k | grep -A 2 -i vga`
+- Instale manualmente: `./venv/bin/pip install pyamdgpuinfo`
 
-* [Hackaday - Cheap LCD Uses USB Serial](https://hackaday.com/2023/09/11/cheap-lcd-uses-usb-serial/)  
+## Contribuindo
 
+Contribuições são bem-vindas! Abra uma issue ou pull request.
 
-* [CNX Software - Turing Smart Screen – A low-cost 3.5-inch USB Type-C information display](https://www.cnx-software.com/2022/04/29/turing-smart-screen-a-low-cost-3-5-inch-usb-type-c-information-display/)
+## Créditos
 
+- **Projeto original:** [turing-smart-screen-python](https://github.com/mathoudebine/turing-smart-screen-python) por Mathieu Houdebine
+- **Fork Regata OS:** [marquimRcc](https://github.com/marquimRcc)
 
-* [Phazer Tech - Turing Smart Screen Python ](https://phazertech.com/tutorials/turing-smart-screen.html)
+---
 
-## Star History
+<a name="english"></a>
 
-[![Star History Chart](https://api.star-history.com/svg?repos=mathoudebine/turing-smart-screen-python&type=Date)](https://star-history.com/#mathoudebine/turing-smart-screen-python&Date)
+## 🇺🇸 English
+
+### Quick Install
+
+```bash
+git clone https://github.com/marquimRcc/turing-smart-screen-python-regataos-opensuse
+cd turing-smart-screen-python-regataos-opensuse
+bash install.sh
+```
+
+### What's Added
+
+This fork adds Regata OS / openSUSE support: automated installer, PyQt5 system tray app, systemd user service, AMD GPU detection, and bilingual interface (PT-BR / EN-US). See the Portuguese sections above for full documentation.
+
+### Uninstall
+
+```bash
+bash uninstall.sh
+```
+
+---
+
+**Licença / License:** GPL-3.0 (mesma do projeto original)

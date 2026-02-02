@@ -1,0 +1,23 @@
+[Unit]
+Description=Turing Smart Screen Display Service
+Documentation=https://github.com/marquimRcc/turing-smart-screen-python-regataos-opensuse
+After=graphical-session.target
+Wants=graphical-session.target
+
+[Service]
+Type=simple
+WorkingDirectory=@TURING_DIR@
+ExecStart=@TURING_DIR@/venv/bin/python3.11 @TURING_DIR@/main.py
+ExecStop=/bin/kill -TERM $MAINPID
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=10
+Environment=DISPLAY=:0
+Environment=XAUTHORITY=%h/.Xauthority
+
+# Resource limits
+Nice=10
+IOSchedulingClass=idle
+
+[Install]
+WantedBy=default.target

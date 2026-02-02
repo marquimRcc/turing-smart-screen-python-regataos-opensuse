@@ -1,0 +1,25 @@
+# =============================================================================
+# Turing Smart Screen - USB Permission Rules
+# Regata OS / openSUSE
+# =============================================================================
+# Install: sudo cp 99-turing-screen.rules /etc/udev/rules.d/
+# Reload:  sudo udevadm control --reload-rules && sudo udevadm trigger
+# =============================================================================
+
+# CH340/CH341 USB-to-Serial (most Turing 3.5" / 5" screens)
+SUBSYSTEM=="usb", ATTR{idVendor}=="1a86", ATTR{idProduct}=="7523", MODE="0666", TAG+="uaccess"
+SUBSYSTEM=="usb", ATTR{idVendor}=="1a86", ATTR{idProduct}=="5523", MODE="0666", TAG+="uaccess"
+
+# Generic CH34x fallback
+SUBSYSTEM=="usb", ATTR{idVendor}=="1a86", MODE="0666", TAG+="uaccess"
+
+# USB HID (newer Turing displays with HID protocol)
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="1a86", MODE="0666", TAG+="uaccess"
+
+# XuanFang displays (alternate vendor)
+SUBSYSTEM=="usb", ATTR{idVendor}=="1fc9", MODE="0666", TAG+="uaccess"
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="1fc9", MODE="0666", TAG+="uaccess"
+
+# Generic serial port access for USB displays
+KERNEL=="ttyUSB[0-9]*", MODE="0666", TAG+="uaccess"
+KERNEL=="ttyACM[0-9]*", MODE="0666", TAG+="uaccess"
