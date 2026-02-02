@@ -37,7 +37,7 @@ _step=0
 _total_steps=8
 
 step() {
-    (( _step++ ))
+    (( ++_step ))
     echo ""
     echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
     echo -e "${BOLD}${BLUE}  [${_step}/${_total_steps}] $1${NC}"
@@ -146,23 +146,18 @@ PACKAGES=(
     libhidapi-devel
     gcc-c++
     git-core
-    lm_sensors
+    sensors
     xdg-utils
 )
 
 info "Pacotes: ${PACKAGES[*]}"
 echo ""
 
-sudo zypper install -y "${PACKAGES[@]}" 2>&1 | while IFS= read -r line; do
-    # Show only meaningful lines
-    case "$line" in
-        *"already installed"*|*"já instalado"*) ok "$line" ;;
-        *"Installing:"*|*"Instalando:"*)        info "$line" ;;
-        *"Nothing to do"*|*"Nada a fazer"*)     ok "$line" ;;
-    esac
-done
-
-ok "Dependências do sistema instaladas"
+if sudo zypper install -y "${PACKAGES[@]}"; then
+    ok "Dependências do sistema instaladas"
+else
+    warn "Alguns pacotes podem não ter sido instalados. Verifique acima."
+fi
 
 ##############################################################################
 # ETAPA 3: PERMISSÕES USB E SENSORES
