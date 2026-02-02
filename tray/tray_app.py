@@ -119,17 +119,20 @@ class TuringTray(QSystemTrayIcon):
         self.themes_menu = menu.addMenu(
             QIcon.fromTheme("preferences-desktop-theme"), t("menu.themes"))
         self._populate_themes()
+        # Refresh theme list every time submenu opens (catches configure.py changes)
+        self.themes_menu.aboutToShow.connect(self._populate_themes)
 
         # ── Orientation ──────────────────────────────────────
         orient_menu = menu.addMenu(
             QIcon.fromTheme("object-rotate-right"), t("menu.orientation"))
         orient_group = QActionGroup(self)
         current_orient = self.screen_config.get_orientation()
-        for deg in (0, 90, 180, 270):
-            act = orient_menu.addAction(f"{deg}°")
+        orient_labels = {0: "0° (Normal)", 1: "90°", 2: "180°", 3: "270°"}
+        for val, label in orient_labels.items():
+            act = orient_menu.addAction(label)
             act.setCheckable(True)
-            act.setChecked(deg == current_orient)
-            act.triggered.connect(lambda _checked, d=deg: self.set_orientation(d))
+            act.setChecked(val == current_orient)
+            act.triggered.connect(lambda _checked, v=val: self.set_orientation(v))
             orient_group.addAction(act)
 
         menu.addSeparator()
@@ -256,28 +259,38 @@ class TuringTray(QSystemTrayIcon):
 
     def set_theme(self, theme_name: str):
         t = self.i18n.t
-        if self.screen_config.set_theme(theme_name):
-            self._populate_themes()
-            if self.service.is_active():
-                reply = QMessageBox.question(
-                    None, t("dialog.theme_changed"),
-                    t("dialog.theme_restart_prompt"),
-                    QMessageBox.Yes | QMessageBox.No,
-                )
-                if reply == QMessageBox.Yes:
-                    self.restart_display()
+        try:
+            if self.screen_config.set_theme(theme_name):
+                self._populate_themes()
+                self._notify(t("notify.theme_applied"),
+                             t("notify.theme_applied_msg", theme_name))
+                if self.service.is_active():
+                    reply = QMessageBox.question(
+                        None, t("dialog.theme_changed"),
+                        t("dialog.theme_restart_prompt"),
+                        QMessageBox.Yes | QMessageBox.No,
+                    )
+                    if reply == QMessageBox.Yes:
+                        self.restart_display()
+        except Exception as exc:
+            self._notify(t("notify.error"), str(exc),
+                         QSystemTrayIcon.Critical)
 
-    def set_orientation(self, degrees: int):
+    def set_orientation(self, value: int):
         t = self.i18n.t
-        if self.screen_config.set_orientation(degrees):
-            if self.service.is_active():
-                reply = QMessageBox.question(
-                    None, t("dialog.orientation_changed"),
-                    t("dialog.orientation_restart_prompt"),
-                    QMessageBox.Yes | QMessageBox.No,
-                )
-                if reply == QMessageBox.Yes:
-                    self.restart_display()
+        try:
+            if self.screen_config.set_orientation(value):
+                if self.service.is_active():
+                    reply = QMessageBox.question(
+                        None, t("dialog.orientation_changed"),
+                        t("dialog.orientation_restart_prompt"),
+                        QMessageBox.Yes | QMessageBox.No,
+                    )
+                    if reply == QMessageBox.Yes:
+                        self.restart_display()
+        except Exception as exc:
+            self._notify(t("notify.error"), str(exc),
+                         QSystemTrayIcon.Critical)
 
     # ── Configurator & editor ────────────────────────────────
 

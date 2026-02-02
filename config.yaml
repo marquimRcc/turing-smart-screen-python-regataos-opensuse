@@ -9,7 +9,7 @@ config:
   # Theme to use (located in res/themes)
   # Use the name of the folder as value
   # Choose a theme made for your screen size (see DISPLAY_SIZE inside theme.yaml)
-  THEME: SimpleBlueGauge
+  THEME: Cyberdeck
   # Hardware sensors reading
   # Choose the appropriate method for reading your hardware sensors:
   # - PYTHON         use Python libraries (psutils, GPUtil...) to read hardware sensors (supports all OS but not all HW)
@@ -68,7 +68,7 @@ display:
   # Display reverse: true/false
   # Set to true to reverse display orientation (landscape <-> reverse landscape, portrait <-> reverse portrait)
   # Note: Display basic orientation (portrait or landscape) is defined by the theme you have selected
-  DISPLAY_REVERSE: false
+  DISPLAY_REVERSE: true
 
   # Reset display on startup: true/false
   # By default, this program resets the display on startup, in case it is in a degraded state from previous runs.

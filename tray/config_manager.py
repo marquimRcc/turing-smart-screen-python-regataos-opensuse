@@ -129,33 +129,32 @@ class ScreenConfig:
 
     # ── Orientation ──────────────────────────────────────────
 
-    _ORIENT_PATTERNS = [
-        r"^\s*DISPLAY_ORIENTATION\s*:\s*(\d+)",
-        r"^\s*orientation\s*:\s*(\d+)",
-    ]
+    # Turing Smart Screen uses 0=0°, 1=90°, 2=180°, 3=270°
+    _ORIENT_PATTERN = r"^(\s*DISPLAY_ORIENTATION\s*:\s*)\d+"
 
     def get_orientation(self) -> int:
         content = self._read()
-        for pat in self._ORIENT_PATTERNS:
-            match = re.search(pat, content, re.MULTILINE)
-            if match:
-                return int(match.group(1))
+        match = re.search(self._ORIENT_PATTERN, content, re.MULTILINE)
+        if match:
+            # Extract just the digit from the full match
+            digit_match = re.search(r"\d+$", match.group(0))
+            return int(digit_match.group(0)) if digit_match else 0
         return 0
 
-    def set_orientation(self, degrees: int) -> bool:
-        """Set orientation to 0, 90, 180, or 270."""
-        if degrees not in (0, 90, 180, 270):
+    def set_orientation(self, value: int) -> bool:
+        """Set orientation: 0=0°, 1=90°, 2=180°, 3=270°."""
+        if value not in (0, 1, 2, 3):
             return False
         content = self._read()
-        for pat in self._ORIENT_PATTERNS:
-            repl_pat = pat.replace(r"(\d+)", r"\d+")
-            prefix = pat.split(r"(\d+)")[0]
-            new, count = re.subn(
-                repl_pat, f"{prefix.lstrip('^')}{degrees}", content, flags=re.MULTILINE
-            )
-            if count:
-                self._write(new)
-                return True
+        new, count = re.subn(
+            self._ORIENT_PATTERN,
+            rf"\g<1>{value}",
+            content,
+            flags=re.MULTILINE,
+        )
+        if count:
+            self._write(new)
+            return True
         return False
 
     # ── Display model ────────────────────────────────────────
