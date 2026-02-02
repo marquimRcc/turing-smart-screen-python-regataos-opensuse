@@ -57,6 +57,7 @@
     "about.upstream": "Projeto Original",
     "about.close": "Fechar",
     "about.license": "Licença: GPL-3.0",
+    "about.credits": "Feito por marquim.rcc com Claude AI Opus 4.5",
 
     "hardware.title": "Informações de Hardware",
     "hardware.gpu": "GPU",

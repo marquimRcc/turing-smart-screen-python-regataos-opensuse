@@ -422,14 +422,17 @@ if [[ "$START_NOW" =~ ^[Ss]$ ]]; then
     echo ""
     if systemctl --user start turing-screen 2>/dev/null; then
         ok "Display iniciado!"
-        info "O ícone da bandeja aparecerá no próximo login."
-        info "Para iniciar a bandeja agora:"
-        echo -e "      $VENV_DIR/bin/python3.11 $REPO_DIR/tray/main.py &"
     else
-        warn "Falha ao iniciar. Verifique a conexão USB e execute:"
+        warn "Falha ao iniciar o display. Verifique a conexão USB e execute:"
         echo -e "      systemctl --user status turing-screen"
     fi
 fi
+
+# Always start the tray app so the user sees it right away
+info "Iniciando aplicativo de bandeja do sistema..."
+nohup "$VENV_DIR/bin/python3.11" "$REPO_DIR/tray/main.py" &>/dev/null &
+disown
+ok "Ícone da bandeja ativo no painel do sistema!"
 
 echo ""
 ok "Instalação finalizada!"
