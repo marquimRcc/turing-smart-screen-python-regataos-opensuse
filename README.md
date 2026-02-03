@@ -17,7 +17,15 @@
 </p>
 
 ---
+### Aplicativo de Bandeja (System Tray)
 
+<p align="center">
+  <img src="assets/screenshots/tray-menu.png"
+       alt="Menu do aplicativo de bandeja do Turing Smart Screen"
+       width="420"/>
+</p>
+
+O aplicativo de bandeja permite controlar totalmente o display diretamente pelo painel do sistema.
 ## Sobre
 
 Este fork do [turing-smart-screen-python](https://github.com/mathoudebine/turing-smart-screen-python) adiciona suporte completo para **Regata OS** e **openSUSE**, incluindo:
