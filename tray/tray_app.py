@@ -149,10 +149,6 @@ class TuringTray(QSystemTrayIcon):
             QIcon.fromTheme("configure"), t("menu.configure"))
         act_wizard.triggered.connect(self.open_configurator)
 
-        act_edit = menu.addAction(
-            QIcon.fromTheme("document-edit"), t("menu.edit_config"))
-        act_edit.triggered.connect(self.edit_config)
-
         act_prefs = menu.addAction(
             QIcon.fromTheme("preferences-system"), t("menu.preferences"))
         act_prefs.triggered.connect(self.show_preferences)
@@ -181,21 +177,6 @@ class TuringTray(QSystemTrayIcon):
             lang_group.addAction(act)
 
         menu.addSeparator()
-
-        # ── Info ─────────────────────────────────────────────
-        act_hw = menu.addAction(
-            QIcon.fromTheme("hwinfo"), t("menu.hardware_info"))
-        act_hw.triggered.connect(self.show_hardware_info)
-
-        act_logs = menu.addAction(
-            QIcon.fromTheme("text-x-log"), t("menu.view_logs"))
-        act_logs.triggered.connect(self.view_logs)
-
-        menu.addSeparator()
-
-        act_support = menu.addAction(
-            QIcon.fromTheme("help-contents"), t("menu.support"))
-        act_support.triggered.connect(lambda: webbrowser.open(self.GITHUB_URL))
 
         act_about = menu.addAction(
             QIcon.fromTheme("help-about"), t("menu.about"))
