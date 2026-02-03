@@ -92,11 +92,18 @@ class TuringTray(QSystemTrayIcon):
         font.setBold(True)
         hdr.setFont(font)
 
-        # Display model (info line)
-        model = self.screen_config.get_display_model()
-        if model:
-            model_action = menu.addAction(f"  📺 {model}")
-            model_action.setEnabled(False)
+        # Display info line (revision + size)
+        revision = self.screen_config.get_display_revision()
+        size = self.screen_config.get_display_size()
+        if revision or size:
+            info_parts = []
+            if revision:
+                info_parts.append(f"Rev. {revision}")
+            if size:
+                info_parts.append(f'{size}"')
+            info_text = f"  📺 {' · '.join(info_parts)}"
+            info_action = menu.addAction(info_text)
+            info_action.setEnabled(False)
 
         menu.addSeparator()
 

@@ -11,7 +11,12 @@ from typing import Any
 class I18n:
     """Simple JSON-based translation manager."""
 
-    SUPPORTED = {"pt_BR": "Português (BR)", "en_US": "English (US)"}
+    SUPPORTED = {
+        "pt_BR": "Português (Brasil)",
+        "pt_PT": "Português (Portugal)",
+        "en_US": "English (US)",
+        "es_ES": "Español",
+    }
 
     def __init__(self, language: str = "pt_BR"):
         self._lang_dir = Path(__file__).parent

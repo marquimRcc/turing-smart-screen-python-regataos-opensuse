@@ -73,6 +73,27 @@ class ScreenConfig:
     ``config.yaml`` using regex (avoids reformatting the YAML).
     """
 
+    # Map display revision to size
+    REVISION_TO_SIZE = {
+        "A": "3.5",      # Turing 3.5"
+        "B": "3.5",      # Turing 3.5" 
+        "C": "5",        # Turing 5"
+        "D": "3.5",      # Kipye Qiye 3.5"
+        "WEACT_A": "3.5",  # WeAct 3.5"
+        "WEACT_B": "0.96", # WeAct 0.96"
+        "SIMU": None,    # Simulated - no filter
+    }
+
+    # Map resolution (WxH) to display size
+    RESOLUTION_TO_SIZE = {
+        (320, 480): "3.5",
+        (480, 320): "3.5",
+        (480, 800): "5",
+        (800, 480): "5",
+        (128, 128): "0.96",
+        (160, 128): "0.96",
+    }
+
     def __init__(self, turing_dir: str):
         self.turing_dir = Path(turing_dir)
         self.config_file = self.turing_dir / "config.yaml"
@@ -93,17 +114,106 @@ class ScreenConfig:
     def exists(self) -> bool:
         return self.config_file.exists()
 
+    # ── Display detection ────────────────────────────────────
+
+    def get_display_revision(self) -> Optional[str]:
+        """Get the REVISION value from config.yaml."""
+        content = self._read()
+        match = re.search(
+            r"^\s*REVISION\s*:\s*[\"']?([^\"'\n#]+)[\"']?",
+            content,
+            re.MULTILINE,
+        )
+        return match.group(1).strip() if match else None
+
+    def get_display_size(self) -> Optional[str]:
+        """
+        Detect display size from REVISION in config.yaml.
+        Returns '3.5', '5', '0.96', or None if unknown.
+        """
+        revision = self.get_display_revision()
+        if revision:
+            return self.REVISION_TO_SIZE.get(revision.upper())
+        return None
+
+    def _get_theme_size(self, theme_dir: Path) -> Optional[str]:
+        """
+        Detect theme size from theme.yaml.
+        Checks DISPLAY_SIZE first, then falls back to resolution.
+        """
+        theme_yaml = theme_dir / "theme.yaml"
+        if not theme_yaml.exists():
+            return None
+        
+        try:
+            with open(theme_yaml, "r", encoding="utf-8") as fh:
+                content = fh.read()
+            
+            # Check for explicit DISPLAY_SIZE
+            match = re.search(
+                r"^\s*DISPLAY_SIZE\s*:\s*[\"']?([0-9.]+)",
+                content,
+                re.MULTILINE,
+            )
+            if match:
+                return match.group(1)
+            
+            # Fall back to resolution detection from BACKGROUND
+            width_match = re.search(
+                r"BACKGROUND:.*?WIDTH\s*:\s*(\d+)",
+                content,
+                re.DOTALL,
+            )
+            height_match = re.search(
+                r"BACKGROUND:.*?HEIGHT\s*:\s*(\d+)",
+                content,
+                re.DOTALL,
+            )
+            
+            if width_match and height_match:
+                w, h = int(width_match.group(1)), int(height_match.group(1))
+                return self.RESOLUTION_TO_SIZE.get((w, h))
+            
+        except Exception:
+            pass
+        
+        return None
+
     # ── Themes ───────────────────────────────────────────────
 
-    def get_available_themes(self) -> List[str]:
-        """List directories under ``res/themes/`` that contain a theme.yaml."""
+    def get_available_themes(self, filter_by_display: bool = True) -> List[str]:
+        """
+        List themes compatible with the current display.
+        
+        If filter_by_display is True (default), only returns themes
+        that match the detected display size.
+        """
         if not self.themes_dir.exists():
             return []
-        return sorted(
-            d.name
-            for d in self.themes_dir.iterdir()
-            if d.is_dir() and (d / "theme.yaml").exists()
-        )
+        
+        display_size = self.get_display_size() if filter_by_display else None
+        
+        themes = []
+        for d in self.themes_dir.iterdir():
+            if not d.is_dir():
+                continue
+            if not (d / "theme.yaml").exists():
+                continue
+            
+            # Skip special directories
+            if d.name.startswith("--") or d.name.startswith("_"):
+                continue
+            
+            # Filter by size if we know the display
+            if display_size:
+                theme_size = self._get_theme_size(d)
+                # Include if: sizes match, or theme size is unknown (be permissive)
+                if theme_size and theme_size != display_size:
+                    continue
+            
+            themes.append(d.name)
+        
+        return sorted(themes)
 
     def get_current_theme(self) -> Optional[str]:
         content = self._read()
