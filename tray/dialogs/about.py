@@ -16,7 +16,7 @@ class AboutDialog(QDialog):
         t = i18n.t
 
         self.setWindowTitle(t("about.title"))
-        self.setFixedSize(440, 340)
+        self.setFixedSize(440, 430)
         self.setWindowFlags(self.windowFlags() & ~Qt.WindowContextHelpButtonHint)
 
         layout = QVBoxLayout(self)
@@ -58,6 +58,12 @@ class AboutDialog(QDialog):
         desc.setAlignment(Qt.AlignCenter)
         desc.setStyleSheet("padding: 8px;")
         layout.addWidget(desc)
+
+        # ── Credits ────────────────────────────────────────
+        credits_label = QLabel(t("about.credits"))
+        credits_label.setAlignment(Qt.AlignCenter)
+        credits_label.setStyleSheet("color: #4a9eff; font-size: 11px; font-weight: bold; padding: 8px;")
+        layout.addWidget(credits_label)
 
         # ── License ─────────────────────────────────────────
         license_label = QLabel(t("about.license"))
