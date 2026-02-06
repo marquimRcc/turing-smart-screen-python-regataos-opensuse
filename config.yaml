@@ -9,7 +9,7 @@ config:
   # Theme to use (located in res/themes)
   # Use the name of the folder as value
   # Choose a theme made for your screen size (see DISPLAY_SIZE inside theme.yaml)
-  THEME: Landscape6Grid
+  THEME: LandscapeMagicBlue
   # Hardware sensors reading
   # Choose the appropriate method for reading your hardware sensors:
   # - PYTHON         use Python libraries (psutils, GPUtil...) to read hardware sensors (supports all OS but not all HW)
@@ -41,12 +41,12 @@ config:
   # You need to subscribe to the 3.0 OneCallAPI that has 1000 free daily calls
   WEATHER_API_KEY: ''
   # Location from which to display the weather. Use for example https://www.latlong.net/ to get latitude/longitude
-  WEATHER_LATITUDE: 45.75
-  WEATHER_LONGITUDE: 4.85
+  WEATHER_LATITUDE: '-18.641460'
+  WEATHER_LONGITUDE: '-48.177151'
   # Units used to display temperatures (metric - °C, imperial - °F, standard - °K)
   WEATHER_UNITS: metric
   # Language is used by the API. Find more here https://openweathermap.org/api/one-call-3#multi
-  WEATHER_LANGUAGE: en
+  WEATHER_LANGUAGE: pt_br
 
 display:
   # Display revision:
